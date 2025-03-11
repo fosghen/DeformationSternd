@@ -22,7 +22,7 @@ class SensorsWorker(QThread):
     def run(self) -> None:
         while self.running:
             try:
-                dino_data = self.dinamometr.real_all()  # Считываем данные с динамометра
+                dino_data = self.dinamometr.read_all()  # Считываем данные с динамометра
                 line_data = lu.read_linear_encoder(self.linear_encoder) # Считываем данные с линейки
 
                 dino_data = dino_data.decode().split("\r\n")
