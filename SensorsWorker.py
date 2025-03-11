@@ -13,6 +13,7 @@ class SensorsWorker(QThread):
         dinanometr: serial.serialwin32.Serial,
         linear_encoder: hid.device
         ):
+        super().__init__()
         self.dinamometr = dinanometr # Интерфейс для получения данных с динамометра
         self.linear_encoder = linear_encoder # Интерфейс для получения данных с линейки
 
