@@ -107,6 +107,8 @@ class MainWindow(QMainWindow):
         self.worker = SensorsWorker(self.dinamometr, self.linear_encoder)
         # Связываем сигнал от воркера с тем, что нужно вывести данные в глобальный лог
         self.worker.data_received.connect(self.update_global_log)
+        self.worker.running = True
+        self.worker.start()
 
     def set_enabled_widgets(self):
         # # Модуль чувствительного элемента
