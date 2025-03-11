@@ -1,9 +1,10 @@
 # This Python file uses the following encoding: utf-8
 import sys
+import datetime
+import serial
 
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtGui import QColor
-import serial
 
 from SensorsWorker import SensorsWorker
 from SettingsDialog import SettingsDialog
@@ -107,8 +108,11 @@ class MainWindow(QMainWindow):
         self.worker = SensorsWorker(self.dinamometr, self.linear_encoder)
         # Связываем сигнал от воркера с тем, что нужно вывести данные в глобальный лог
         self.worker.data_received.connect(self.update_global_log)
+        # Запускаем
         self.worker.running = True
         self.worker.start()
+        # Делаем заголовок для глобального лона
+        self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
 
     def set_enabled_widgets(self):
         # # Модуль чувствительного элемента
@@ -163,7 +167,9 @@ class MainWindow(QMainWindow):
         su.stop(self.stepper_motor)
 
     def update_global_log(self, data: list):
-        self.ui.tedit_global_log.append(str(data[0]) + "\t" + str(data[1]))
+        now = datetime.datetime.now()
+        formatted_time = now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        self.ui.tedit_global_log.append(formatted_time + "\t" + str(data[0]) + "\t" + str(data[1]))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

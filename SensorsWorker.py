@@ -6,7 +6,7 @@ import utils.lir_utils as lu
 
 
 class SensorsWorker(QThread):
-    data_received = Signal(str)  # Сигнал для передачи данных в основной поток
+    data_received = Signal(list)  # Сигнал для передачи данных в основной поток
 
     def __init__(
         self,
@@ -26,6 +26,7 @@ class SensorsWorker(QThread):
                 line_data = lu.read_linear_encoder(self.linear_encoder) # Считываем данные с линейки
 
                 dino_data = dino_data.decode().split("\r\n")
+
                 try:
                     dino_data = float(dino_data[-1])
                 except:
