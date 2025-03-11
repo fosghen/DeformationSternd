@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.gridLayout_6.setObjectName(u"gridLayout_6")
         self.tedit_global_log = QTextEdit(self.log_frame)
         self.tedit_global_log.setObjectName(u"tedit_global_log")
-        self.tedit_global_log.setEnabled(False)
+        self.tedit_global_log.setEnabled(True)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -57,6 +57,7 @@ class Ui_MainWindow(object):
         self.tedit_global_log.setFont(font)
         self.tedit_global_log.setFrameShadow(QFrame.Shadow.Raised)
         self.tedit_global_log.setLineWidth(0)
+        self.tedit_global_log.setReadOnly(True)
 
         self.gridLayout_6.addWidget(self.tedit_global_log, 1, 0, 1, 1)
 
