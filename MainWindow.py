@@ -61,6 +61,8 @@ class MainWindow(QMainWindow):
         # Связываем сигналы от кнопок в модуле подвижки с функциями
         self.ui.pbutton_start.pressed.connect(self.start_stepper_motor)
         self.ui.pbutton_stop.pressed.connect(self.stop_stepper_motor)
+        # Связываем сигнал от кнопки установки нуля с функцией
+        self.ui.pbutton_set_zero.pressed.connect(self.set_zero_on_line)
 
 
     # Вызаваем окно настроек
@@ -146,7 +148,7 @@ class MainWindow(QMainWindow):
 
         # # Модуль деформации
         # self.ui.dsbox_deform_area.setEnabled(1)
-        # self.ui.pbutton_set_zero.setEnabled(1)
+        self.ui.pbutton_set_zero.setEnabled(1)
         # self.ui.cmob_type_deform.setEnabled(1)
         # self.ui.dsbox_long_deform.setEnabled(1)
         # self.ui.cbox_units_long_deform.setEnabled(1)
@@ -170,6 +172,9 @@ class MainWindow(QMainWindow):
         now = datetime.datetime.now()
         formatted_time = now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         self.ui.tedit_global_log.append(formatted_time + "\t" + str(data[0]) + "\t" + str(data[1]))
+
+    def set_zero_on_line(self):
+        lu.set_zero_linear_encoder(self.linear_encoder)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
