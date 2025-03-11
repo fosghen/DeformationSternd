@@ -1,0 +1,35 @@
+from PySide6.QtCore import QThread, Signal
+import time
+import serial, hid
+import utils.lir_utils as lu
+# This Python file uses the following encoding: utf-8
+
+
+class SensorsWorker(QThread):
+    data_received = Signal(str)  # Сигнал для передачи данных в основной поток
+
+    def __init__(
+        self,
+        dinanometr: serial.serialwin32.Serial,
+        linear_encoder: hid.device
+        ):
+        self.dinamometr = dinanometr # Интерфейс для получения данных с динамометра
+        self.linear_encoder = linear_encoder # Интерфейс для получения данных с линейки
+
+        self.running = True # Флаг остановки потока
+
+    def run(self) -> None:
+        while self.running:
+            try:
+                dino_data = self.dinamometr.real_all()  # Считываем данные с динамометра
+                line_data = lu.read_linear_encoder(self.linear_encoder)
+                # Добавить обработку данных
+                if dino_data:
+                    self.data_received.emit([dino_data, line_data])  # Отправляем данные в основной поток
+            except serial.SerialException as e:
+                self.data_received.emit(f"Ошибка связи: {e}")
+                break
+            time.sleep(0.5)
+
+    def stop(self) -> None:
+        self.running = False  # Останавливаем поток
