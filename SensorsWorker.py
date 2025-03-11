@@ -22,8 +22,14 @@ class SensorsWorker(QThread):
         while self.running:
             try:
                 dino_data = self.dinamometr.real_all()  # Считываем данные с динамометра
-                line_data = lu.read_linear_encoder(self.linear_encoder)
-                # Добавить обработку данных
+                line_data = lu.read_linear_encoder(self.linear_encoder) # Считываем данные с линейки
+
+                dino_data = dino_data.decode().split("\r\n")
+                try:
+                    dino_data = float(dino_data[-1])
+                except:
+                    dino_data = float(dino_data[-2])
+
                 if dino_data:
                     self.data_received.emit([dino_data, line_data])  # Отправляем данные в основной поток
             except serial.SerialException as e:

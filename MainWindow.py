@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtGui import QColor
 import serial
 
+from SensorsWorker import SensorsWorker
 from SettingsDialog import SettingsDialog
 from ui_form import Ui_MainWindow
 from QToggle import QToggle
@@ -27,6 +28,9 @@ class MainWindow(QMainWindow):
         self.dinamometr = None
         self.stepper_motor = None
         self.linear_encoder = None
+
+        # Создаём объект для считывания данных с датчика
+        self.worker = None
 
         # Создаём переключатель для изменения направления движения двигателя
         self.ui.customCheckBox = QToggle(
@@ -53,8 +57,10 @@ class MainWindow(QMainWindow):
         if self.ui.connection_settings:
             self.ui.connection_settings.triggered.connect(self.open_settings)
 
+        # Связываем сигналы от кнопок в модуле подвижки с функциями
         self.ui.pbutton_start.pressed.connect(self.start_stepper_motor)
         self.ui.pbutton_stop.pressed.connect(self.stop_stepper_motor)
+
 
     # Вызаваем окно настроек
     def open_settings(self):
@@ -86,16 +92,21 @@ class MainWindow(QMainWindow):
             return
 
         # Подключаемся к линейке
-        # self.linear_encoder = lu.connect(
-        #         0xdead,
-        #         0xffff)
-        # lu.start_setup(self.linear_encoder)
+        self.linear_encoder = lu.connect(
+                0xdead,
+                0xffff)
+        lu.start_setup(self.linear_encoder)
 
-        # if (not self.linear_encoder):
-        #     print("Не смог подключиться к линейному энкодеру")
-        #     return
+        if (not self.linear_encoder):
+            print("Не смог подключиться к линейному энкодеру")
+            return
 
         self.set_enabled_widgets()
+
+        # Передаём воркеру интерфейсы общения
+        self.worker = SensorsWorker(self.dinamometr, self.linear_encoder)
+        # Связываем сигнал от воркера с тем, что нужно вывести данные в глобальный лог
+        self.worker.data_received.connect(self.update_global_log)
 
     def set_enabled_widgets(self):
         # # Модуль чувствительного элемента
@@ -146,10 +157,11 @@ class MainWindow(QMainWindow):
 
         su.start(speed, direction, count, self.stepper_motor)
 
-        self.ui.tedit_global_log.append("asdasd")
-
     def stop_stepper_motor(self):
         su.stop(self.stepper_motor)
+
+    def update_global_log(self, data: list):
+        self.ui.tedit_global_log.append(str(data[0]) + "\t" + str(data[1]))
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
