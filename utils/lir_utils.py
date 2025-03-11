@@ -249,7 +249,7 @@ def decode_linear_buff(buffer: list) -> float:
         if (coords_full - 0xffffffffffffffff) > -430 * 10000:
             coords_full = coords_full - 0xffffffffffffffff
         
-        print("Показания датчика: ", coords_full / 10, " мкм")
+        # print("Показания датчика: ", coords_full / 10, " мкм")
 
     return coords_full / 10
 
