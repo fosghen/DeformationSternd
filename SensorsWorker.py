@@ -21,6 +21,7 @@ class SensorsWorker(QThread):
 
     def run(self) -> None:
         while self.running:
+            time.sleep(0.5)
             try:
                 dino_data = self.dinamometr.read_all()  # Считываем данные с динамометра
                 line_data = lu.read_linear_encoder(self.linear_encoder) # Считываем данные с линейки
@@ -37,7 +38,6 @@ class SensorsWorker(QThread):
             except serial.SerialException as e:
                 self.data_received.emit(f"Ошибка связи: {e}")
                 break
-            time.sleep(0.5)
 
     def stop(self) -> None:
         self.running = False  # Останавливаем поток
