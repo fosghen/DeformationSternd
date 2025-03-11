@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1140</width>
-    <height>829</height>
+    <width>1293</width>
+    <height>820</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,14 +34,14 @@
               <bool>false</bool>
              </property>
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
              <property name="maximumSize">
               <size>
-               <width>300</width>
+               <width>600</width>
                <height>16777215</height>
               </size>
              </property>
@@ -406,7 +406,7 @@
               </font>
              </property>
              <property name="text">
-              <string>                                                        </string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -422,7 +422,7 @@
               </font>
              </property>
              <property name="text">
-              <string>                                                        </string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -1326,7 +1326,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1140</width>
+     <width>1293</width>
      <height>20</height>
     </rect>
    </property>
