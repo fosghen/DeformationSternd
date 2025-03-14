@@ -102,6 +102,8 @@ class Ui_MainWindow(object):
         self.dsbox_trans_deform = QDoubleSpinBox(self.experiment_frame)
         self.dsbox_trans_deform.setObjectName(u"dsbox_trans_deform")
         self.dsbox_trans_deform.setEnabled(False)
+        self.dsbox_trans_deform.setDecimals(3)
+        self.dsbox_trans_deform.setMaximum(1000.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_trans_deform, 4, 1, 1, 1)
 
@@ -141,6 +143,8 @@ class Ui_MainWindow(object):
         self.dsbox_dist_to_trans_deform = QDoubleSpinBox(self.experiment_frame)
         self.dsbox_dist_to_trans_deform.setObjectName(u"dsbox_dist_to_trans_deform")
         self.dsbox_dist_to_trans_deform.setEnabled(False)
+        self.dsbox_dist_to_trans_deform.setDecimals(3)
+        self.dsbox_dist_to_trans_deform.setMaximum(1000.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_dist_to_trans_deform, 5, 2, 1, 1)
 
@@ -178,6 +182,8 @@ class Ui_MainWindow(object):
         self.dsbox_long_deform.setObjectName(u"dsbox_long_deform")
         self.dsbox_long_deform.setEnabled(False)
         self.dsbox_long_deform.setFont(font2)
+        self.dsbox_long_deform.setDecimals(3)
+        self.dsbox_long_deform.setMaximum(1000.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_long_deform, 3, 1, 1, 1)
 
@@ -192,6 +198,7 @@ class Ui_MainWindow(object):
         self.dsbox_deform_area.setMaximumSize(QSize(16777215, 16777215))
         self.dsbox_deform_area.setFont(font2)
         self.dsbox_deform_area.setDecimals(3)
+        self.dsbox_deform_area.setMaximum(1000.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_deform_area, 1, 1, 1, 1)
 
@@ -263,6 +270,11 @@ class Ui_MainWindow(object):
         self.label_units_total_deform.setObjectName(u"label_units_total_deform")
 
         self.gridLayout_7.addWidget(self.label_units_total_deform, 7, 3, 1, 1)
+
+        self.pbutton_save_file = QPushButton(self.experiment_frame)
+        self.pbutton_save_file.setObjectName(u"pbutton_save_file")
+
+        self.gridLayout_7.addWidget(self.pbutton_save_file, 8, 2, 1, 1)
 
 
         self.experiment_layout.addWidget(self.experiment_frame, 0, 0, 1, 1)
@@ -790,6 +802,7 @@ class Ui_MainWindow(object):
         self.label_leng_trans_out.setText("")
         self.label_total_deform_out.setText("")
         self.label_units_total_deform.setText(QCoreApplication.translate("MainWindow", u"\u043c\u043a\u03b5", None))
+        self.pbutton_save_file.setText(QCoreApplication.translate("MainWindow", u"\u0421\u043e\u0445\u0440\u0430\u043d\u0438\u0442\u044c \u0444\u0430\u0439\u043b", None))
         self.label_name_uo.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0438\u043c\u0435\u043d\u043e\u0432\u0430\u043d\u0438\u0435 \u0423\u041e", None))
         self.label_fac_no.setText(QCoreApplication.translate("MainWindow", u"\u0417\u0430\u0432\u043e\u0434\u0441\u043a\u043e\u0439 \u2116", None))
         self.label_chan_no.setText(QCoreApplication.translate("MainWindow", u"\u2116 \u043a\u0430\u043d\u0430\u043b\u0430 \u0438\u0437\u043c.", None))

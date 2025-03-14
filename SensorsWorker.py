@@ -1,6 +1,7 @@
 from PySide6.QtCore import QThread, Signal
 import time
-import serial, hid
+import serial
+import hid
 import utils.lir_utils as lu
 # This Python file uses the following encoding: utf-8
 
@@ -24,7 +25,7 @@ class SensorsWorker(QThread):
             time.sleep(0.5)
             try:
                 dino_data = self.dinamometr.read_all()  # Считываем данные с динамометра
-                line_data = lu.read_linear_encoder(self.linear_encoder) # Считываем данные с линейки
+                line_data = -lu.read_linear_encoder(self.linear_encoder) # Считываем данные с линейки
 
                 dino_data = dino_data.decode().split("\r\n")
 
