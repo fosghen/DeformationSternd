@@ -294,14 +294,16 @@ class MainWindow(QMainWindow):
                 steps, eps_long = self._compute_long_deform()
         eps_full = eps_trans + eps_long
         self.ui.label_total_deform_out.setText(str(eps_full))
-
+        
+        print(int(steps / 4), self.prev_long_deform)
         if (int(steps / 4) > self.prev_long_deform):
             su.start(300, 0, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
+            print(f"Шагнул к двигателю на {abs(int(steps / 4) - self.prev_long_deform) * 4}")
         else:
             su.start(300, 1, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
+            print(f"Шагнул от двигателя на {abs(int(steps / 4) - self.prev_long_deform) * 4}")
 
         self.prev_long_deform = int(steps / 4)
-        su.start(300, 1, steps, self.stepper_motor)
 
     def save_file(self) -> None:
         file_path, _ = QFileDialog.getSaveFileName(self, "Сохранить файл", os.getcwd(), "Файл с разделителем запятая (*.csv);;Все файлы (*)")
