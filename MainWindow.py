@@ -290,6 +290,8 @@ class MainWindow(QMainWindow):
                 steps, eps_long = self._compute_long_deform()
         eps_full = eps_trans + eps_long
         self.ui.label_total_deform_out.setText(str(eps_full))
+        # TODO: добавить логику выбора направления и количество шагов
+        su.start(300, 1, steps, self.stepper_motor)
 
     def save_file(self) -> None:
         file_path, _ = QFileDialog.getSaveFileName(self, "Сохранить файл", os.getcwd(), "Файл с разделителем запятая (*.csv);;Все файлы (*)")
