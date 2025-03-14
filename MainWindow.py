@@ -31,6 +31,9 @@ class MainWindow(QMainWindow):
         # Флаг начала эксперимента
         self.flag_start = True
 
+        # Предыдущее значение продольной деформации
+        self.prev_long_deform = 0
+
         # Массивы для хранения показаний
         self.time_list = []
         self.linear_encoder_list = []
@@ -274,6 +277,7 @@ class MainWindow(QMainWindow):
             self.dinamometr_list = []
             self.deformation_list = []
             self.deformation_flag_list = []
+            self.prev_long_deform = 0
 
 
         eps_trans = 0
@@ -290,7 +294,13 @@ class MainWindow(QMainWindow):
                 steps, eps_long = self._compute_long_deform()
         eps_full = eps_trans + eps_long
         self.ui.label_total_deform_out.setText(str(eps_full))
-        # TODO: добавить логику выбора направления и количество шагов
+
+        if (int(steps / 4) > self.prev_long_deform):
+            su.start(300, 0, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
+        else:
+            su.start(300, 1, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
+
+        self.prev_long_deform = int(steps / 4)
         su.start(300, 1, steps, self.stepper_motor)
 
     def save_file(self) -> None:
