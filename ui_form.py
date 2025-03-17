@@ -449,12 +449,12 @@ class Ui_MainWindow(object):
 
         self.gridLayout_5.addWidget(self.label_type_of, 4, 0, 1, 1)
 
-        self.ledit_tipe_of = QLineEdit(self.module_surv_dev_frame)
-        self.ledit_tipe_of.setObjectName(u"ledit_tipe_of")
-        self.ledit_tipe_of.setEnabled(False)
-        self.ledit_tipe_of.setFont(font6)
+        self.ledit_type_of = QLineEdit(self.module_surv_dev_frame)
+        self.ledit_type_of.setObjectName(u"ledit_type_of")
+        self.ledit_type_of.setEnabled(False)
+        self.ledit_type_of.setFont(font6)
 
-        self.gridLayout_5.addWidget(self.ledit_tipe_of, 4, 1, 1, 3)
+        self.gridLayout_5.addWidget(self.ledit_type_of, 4, 1, 1, 3)
 
 
         self.module_surv_dev_layout.addWidget(self.module_surv_dev_frame)

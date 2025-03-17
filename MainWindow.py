@@ -3,6 +3,7 @@ import sys
 import os
 import datetime
 import serial
+from  time import sleep
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
 from PySide6.QtGui import QColor
@@ -13,6 +14,7 @@ from ui_form import Ui_MainWindow
 from QToggle import QToggle
 import utils.lir_utils as lu
 import utils.stepper_utils as su
+from utils.common_utils import get_value_from_sensors
 
 from numpy import savetxt, vstack, array
 
@@ -40,6 +42,10 @@ class MainWindow(QMainWindow):
         self.dinamometr_list = []
         self.deformation_list = []
         self.deformation_flag_list = [] # 0 - прод 1 - попер 2 - обе
+
+        # Аттрибуты для хранения текущих показаний
+        self.length_current = 0
+        self.force_current = 0
 
         # Создаём объекты для COM-портов
         self.dinamometr = None
@@ -142,26 +148,26 @@ class MainWindow(QMainWindow):
     def set_enabled_widgets(self) -> None:
         '''Делаем активными виджеты, после того, как успешно подключились к датчиками.'''
         # # Модуль чувствительного элемента
-        # self.ui.ledit_type_se.setEnabled(1)
-        # self.ui.ledit_sens_el.setEnabled(1)
-        # self.ui.dsbox_diam_start.setEnabled(1)
-        # self.ui.dsbox_mod_young.setEnabled(1)
-        # self.ui.dsbox_max_deform.setEnabled(1)
-        # self.ui.dsbox_max_force.setEnabled(1)
-        # self.ui.dsbox_deform_lim.setEnabled(1)
-        # self.ui.dsbox_sagging.setEnabled(1)
-        # self.ui.ledit_notes.setEnabled(1)
+        self.ui.ledit_type_se.setEnabled(1)
+        self.ui.ledit_sens_el.setEnabled(1)
+        self.ui.dsbox_diam_start.setEnabled(1)
+        self.ui.dsbox_mod_young.setEnabled(1)
+        self.ui.dsbox_max_deform.setEnabled(1)
+        self.ui.dsbox_max_force.setEnabled(1)
+        self.ui.dsbox_deform_lim.setEnabled(1)
+        self.ui.dsbox_sagging.setEnabled(1)
+        self.ui.ledit_notes.setEnabled(1)
 
         # # Модуль испытуемого устройства опроса
-        # self.ui.ledit_type_uo.setEnabled(1)
-        # self.ui.ledit_name_uo.setEnabled(1)
-        # self.ui.ledit_fac_no.setEnabled(1)
-        # self.ui.ledit_tipe_of.setEnabled(1)
-        # self.ui.dsbox_meas_dist.setEnabled(1)
-        # self.ui.dsbox_spat_res.setEnabled(1)
-        # self.ui.sbox_chan_no.setEnabled(1)
-        # self.ui.ledit_diap_meas_def.setEnabled(1)
-        # self.ui.dsbox_opt_dist.setEnabled(1)
+        self.ui.ledit_type_uo.setEnabled(1)
+        self.ui.ledit_name_uo.setEnabled(1)
+        self.ui.ledit_fac_no.setEnabled(1)
+        self.ui.ledit_type_of.setEnabled(1)
+        self.ui.dsbox_meas_dist.setEnabled(1)
+        self.ui.dsbox_spat_res.setEnabled(1)
+        self.ui.sbox_chan_no.setEnabled(1)
+        self.ui.ledit_diap_meas_def.setEnabled(1)
+        self.ui.dsbox_opt_dist.setEnabled(1)
 
         # Модуль подвижки
         self.ui.sbox_speed.setEnabled(1)
@@ -199,6 +205,9 @@ class MainWindow(QMainWindow):
         now = datetime.datetime.now()
         formatted_time = now.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         self.ui.tedit_global_log.append(formatted_time + "\t" + str(data[0]) + "\t" + str(data[1]))
+
+        self.force_current, self.length_current = data
+
         # Если есть разрешение записи в файл, то сохраняется значение текущие
         if (self.ui.chbox_write_file.isChecked):
             # Время
@@ -255,7 +264,7 @@ class MainWindow(QMainWindow):
         full_length = self.ui.dsbox_deform_area.value() * 1e3
         # Удлинение в некоторых эпсилонах далее переведём
         eps = self.ui.dsbox_long_deform.value()
-
+        # Пересчитываем продольную деформацию в зависимотси от единиц измерений
         match self.ui.cbox_units_long_deform.currentIndex():
             case 0:
                 eps *= 1e-3
@@ -269,50 +278,70 @@ class MainWindow(QMainWindow):
 
     def start_deformation(self) -> None:
         '''Запустить деформирование оптического волокна.'''
+
+
         # Если первый запуск, то очищаем все массивы
         if self.flag_start:
             self.flag_start = False
+
             self.time_list = []
             self.linear_encoder_list = []
             self.dinamometr_list = []
             self.deformation_list = []
             self.deformation_flag_list = []
+
             self.prev_long_deform = 0
 
+            self.find_zero_position()
+            # TODO: добавить алгоритм, который ищет ноль до отсутствия провисания
 
+        # Определяем общую деформацию
         eps_trans = 0
         eps_long = 0
         match self.ui.cmob_type_deform.currentIndex():
+            # В случае только продольной, общая деформация равна продольной
             case 0:
                 steps, eps_long = self._compute_long_deform()
+            # В случае только поперечной, общая деформация равна поперечной
             case 1:
                 trans_deform, eps_trans = self._compute_trans_deform()
+                # Выводим в поле, насколько нужно сместить поперечный вал
                 self.ui.label_leng_trans_out.setText(str(trans_deform))
+            # В случае только продольной поперечной, общая деформация равна сумме продольной и поперечной
             case 2:
                 trans_deform, eps_trans = self._compute_trans_deform()
+                # Выводим в поле, насколько нужно сместить поперечный вал
                 self.ui.label_leng_trans_out.setText(str(trans_deform))
                 steps, eps_long = self._compute_long_deform()
         eps_full = eps_trans + eps_long
         self.ui.label_total_deform_out.setText(str(eps_full))
         
-        print(int(steps / 4), self.prev_long_deform)
-        if (int(steps / 4) > self.prev_long_deform):
-            su.start(300, 0, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
-            print(f"Шагнул к двигателю на {abs(int(steps / 4) - self.prev_long_deform) * 4}")
-        else:
-            su.start(300, 1, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
-            print(f"Шагнул от двигателя на {abs(int(steps / 4) - self.prev_long_deform) * 4}")
+        # Определяем максмальные допустимые усилие и деформацию, если они нулевые, то ограничений нет
+        max_deform = self.ui.dsbox_max_deform.value() if (self.ui.dsbox_max_deform.value() >= 1e-3) else 1e6
+        max_force = self.ui.dsbox_max_force.value() if (self.ui.dsbox_max_force.value() >= 1e-3) else 1e6
 
-        self.prev_long_deform = int(steps / 4)
+        # Если текущая сила или деформация превыщает, то мы ничего не делаем
+        if (max_force > self.force_current) and (max_deform > eps_full * 1e4):
+            # А если делаем, то сравниваемся с предылущим значением и уже на основе этого вычисляем
+            # направление и количество шагов
+            if (int(steps / 4) > self.prev_long_deform):
+                su.start(300, 0, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
+                print(f"Шагнул к двигателю на {abs(int(steps / 4) - self.prev_long_deform) * 4}")
+            else:
+                su.start(300, 1, abs(int(steps / 4) - self.prev_long_deform) * 4, self.stepper_motor)
+                print(f"Шагнул от двигателя на {abs(int(steps / 4) - self.prev_long_deform) * 4}")
+
+            self.prev_long_deform = int(steps / 4)
 
     def save_file(self) -> None:
+        '''Сохранить эксперимент в текстовый файл'''
         file_path, _ = QFileDialog.getSaveFileName(self, "Сохранить файл", os.getcwd(), "Файл с разделителем запятая (*.csv);;Все файлы (*)")
         if file_path:
             # Выключаем запись в файл
             self.ui.chbox_write_file.setChecked(False)
             # Выставляем флаг, что следующий запуск будет новый эксперимент
             self.flag_start = True
-
+            # Сохраняем текстовый файл в формате csv
             savetxt(
                 file_path,
                 vstack((
@@ -324,10 +353,66 @@ class MainWindow(QMainWindow):
                 )).T,
                 delimiter=';',
                 fmt='%s',
-                header = "Time;Linear Encoder;Dinamometr;Deformation;Deformation type;"
+                header = self.create_header(),
+                comments=''
             )
 
+    def create_header(self) -> str:
+        '''Создать заголовок для файла сохранения'''
+        ce_data = {
+                "Вид ЧЭ": self.ui.ledit_type_se.text(),
+                "Схема подключения": self.ui.ledit_sens_el.text(),
+                "Начальный диаметр сечения ЧЭ": f"{self.ui.dsbox_diam_start.value()} мм",
+                "Модуль Юнга, E": f"{self.ui.dsbox_mod_young.value()} Па",
+                "Максимальная деформация": f"{self.ui.dsbox_max_deform.value()} %",
+                "Максимальное усилие": f"{self.ui.dsbox_max_force.value()} Н",
+                "Усилие исключающее провисание": f"{self.ui.dsbox_deform_lim.value()} Н",
+                "Придел упругой деформации": f"{self.ui.dsbox_sagging.value()} Н",
+                "Заметки": self.ui.ledit_notes.text()
+            }
 
+        uo_data = {
+            "Тип УО": self.ui.ledit_type_uo.text(),
+            "Наименование УО": self.ui.ledit_name_uo.text(),
+            "Заводской №": self.ui.ledit_fac_no.text(),
+            "Вид ОВ": self.ui.ledit_type_of.text(),
+            "Измеряемая дистанция": f"{self.ui.dsbox_meas_dist.value()} мм",
+            "Пространственное разрешение": f"{self.ui.dsbox_spat_res.value()} м",
+            "№ канала изм.": self.ui.sbox_chan_no.value(),
+            "Диапазон измеряемой деформации": self.ui.ledit_diap_meas_def.text(),
+            "Оптическое расстояние": f"{self.ui.dsbox_opt_dist.value()} м"
+        }
+
+        # Формируем заголовок
+        header_sections = [
+            "========Описание ЧЭ========",
+            *[f"{key}: {value}" for key, value in ce_data.items()],
+            "========Описание УО========",
+            *[f"{key}: {value}" for key, value in uo_data.items()],
+            "========Измеряемые параметры========",
+            "Time;Linear Encoder;Dinamometr;Deformation;Deformation type;"
+        ]
+
+        return "\n".join(header_sections)
+
+    def find_zero_position(self) -> None:
+        '''Поиск позиции преднатяга, выставление нулевой точки'''
+        # 1. Определение стартовых значений
+        x_0, f_0 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
+
+        # 2. Смещение на 100 шагов к двигателю
+        su.start(500, 0, 100, self.stepper_motor)
+        sleep(3)
+
+        # 3. Определение новых значений
+        x_1, f_1 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
+        print(x_0, x_1, f_0, f_1)
+
+        # 4. Вычисление новой координаты
+        x_2 = (x_1 - x_0) * (self.ui.dsbox_max_force.value() - f_0) / (f_1 - f_0) + x_0
+
+        # 5. Отправляем работать шаговый двигатель
+        su.start(500, int(x_2 < 0), int(abs(4 * x_2)), self.stepper_motor)
 
 
 if __name__ == "__main__":

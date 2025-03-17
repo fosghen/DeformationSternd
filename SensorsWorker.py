@@ -3,6 +3,8 @@ import time
 import serial
 import hid
 import utils.lir_utils as lu
+import numpy as np
+
 # This Python file uses the following encoding: utf-8
 
 

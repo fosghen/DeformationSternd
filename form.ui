@@ -781,7 +781,7 @@
             </widget>
            </item>
            <item row="4" column="1" colspan="3">
-            <widget class="QLineEdit" name="ledit_tipe_of">
+            <widget class="QLineEdit" name="ledit_type_of">
              <property name="enabled">
               <bool>false</bool>
              </property>
