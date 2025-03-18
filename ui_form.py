@@ -29,6 +29,10 @@ class Ui_MainWindow(object):
         MainWindow.resize(1293, 820)
         self.connection_settings = QAction(MainWindow)
         self.connection_settings.setObjectName(u"connection_settings")
+        self.deform_graph = QAction(MainWindow)
+        self.deform_graph.setObjectName(u"deform_graph")
+        self.force_graph = QAction(MainWindow)
+        self.force_graph.setObjectName(u"force_graph")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout_2 = QGridLayout(self.centralwidget)
@@ -869,13 +873,18 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QRect(0, 0, 1293, 20))
         self.menu_conn = QMenu(self.menubar)
         self.menu_conn.setObjectName(u"menu_conn")
+        self.menu = QMenu(self.menubar)
+        self.menu.setObjectName(u"menu")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.menubar.addAction(self.menu_conn.menuAction())
+        self.menubar.addAction(self.menu.menuAction())
         self.menu_conn.addAction(self.connection_settings)
+        self.menu.addAction(self.deform_graph)
+        self.menu.addAction(self.force_graph)
 
         self.retranslateUi(MainWindow)
 
@@ -885,6 +894,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.connection_settings.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0441\u043e\u0435\u0434\u0438\u043d\u0435\u043d\u0438\u044f", None))
+        self.deform_graph.setText(QCoreApplication.translate("MainWindow", u"\u0414\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f", None))
+        self.force_graph.setText(QCoreApplication.translate("MainWindow", u"\u0421\u0438\u043b\u0430", None))
         self.label_module_rec_data.setText(QCoreApplication.translate("MainWindow", u"\u041c\u043e\u0434\u0443\u043b\u044c \u043f\u043e\u043b\u0443\u0447\u0430\u0435\u043c\u044b\u0445 \u0434\u0430\u043d\u043d\u044b\u0445", None))
         self.label_dist_to_trans_deform.setText(QCoreApplication.translate("MainWindow", u"\u0420\u0430\u0441\u0441\u0442\u043e\u044f\u043d\u0438\u0435 \u0434\u043e \u0442\u043e\u0447\u043a\u0438 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u044f \u043f\u043e\u043f\u0435\u0440\u0435\u0447\u043d\u043e\u0439 \u0434\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u0438, \u0394L\u043f", None))
         self.label_type_deform.setText(QCoreApplication.translate("MainWindow", u"\u0412\u0438\u0434 \u0434\u0435\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u0438", None))
@@ -968,5 +979,6 @@ class Ui_MainWindow(object):
         self.label_output_module_elast.setText("")
         self.label_units__module_elast.setText(QCoreApplication.translate("MainWindow", u"E", None))
         self.menu_conn.setTitle(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 ", None))
+        self.menu.setTitle(QCoreApplication.translate("MainWindow", u"\u0413\u0440\u0430\u0444\u0438\u043a\u0438", None))
     # retranslateUi
 

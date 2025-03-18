@@ -15,6 +15,7 @@ from QToggle import QToggle
 import utils.lir_utils as lu
 import utils.stepper_utils as su
 from utils.common_utils import get_value_from_sensors
+from PyQtGraphWidget import PyQtGraphWidget
 
 from numpy import savetxt, vstack, array, pi
 
@@ -61,6 +62,10 @@ class MainWindow(QMainWindow):
         # Создаём объект для считывания данных с датчика
         self.worker = None
 
+        # Создаём объекты для окон графиков
+        self.deform_graph = None
+        self.force_graph = None
+
         # Создаём переключатель для изменения направления движения двигателя
         self.ui.customCheckBox = QToggle(
                             checkedText="К двигателю",
@@ -82,9 +87,16 @@ class MainWindow(QMainWindow):
         self.ui.dsbox_distance.setRange(1, 400)
         self.ui.dsbox_distance.setValue(5)
 
-        # Связываем сигнал с вызова настроек с соответствующей функцией
+        # Связываем сигнал вызова настроек с соответствующей функцией
         if self.ui.connection_settings:
             self.ui.connection_settings.triggered.connect(self.open_settings)
+
+        # Связываем сигналы вызовов графиков со своими функциями
+        if self.ui.deform_graph:
+            self.ui.deform_graph.triggered.connect(self.open_deform_graph)
+        if self.ui.force_graph:
+            self.ui.force_graph.triggered.connect(self.open_force_graph)
+
 
         # Связываем сигналы от кнопок в модуле подвижки с функциями
         self.ui.pbutton_start.pressed.connect(self.start_stepper_motor)
@@ -107,6 +119,16 @@ class MainWindow(QMainWindow):
         # Связываем события закрытия с функцией
         self.settings_window.finished.connect(self.on_settings_closed)
         self.settings_window.exec()
+
+    def open_deform_graph(self) -> None:
+        '''Создание окна с графиком деформации'''
+        self.deform_graph = PyQtGraphWidget("Деформация", "мкε")
+        self.deform_graph.show()
+
+    def open_force_graph(self) -> None:
+        '''Создание окна с графиком деформации'''
+        self.force_graph = PyQtGraphWidget("Сила", "Н")
+        self.force_graph.show()
 
     def on_settings_closed(self) -> None:
         '''
@@ -201,7 +223,7 @@ class MainWindow(QMainWindow):
         self.prev_linear_encoder = self.length_current
 
         # Если есть разрешение записи в файл, то сохраняется значение текущие
-        if (self.ui.chbox_write_file.isChecked):
+        if (self.ui.chbox_write_file.isChecked()):
             # Время
             self.time_list.append(formatted_time)
             # Показания линейки
@@ -221,6 +243,12 @@ class MainWindow(QMainWindow):
                     _, eps_trans = self._compute_trans_deform()
                     eps = eps_long + eps_trans
             self.deformation_list.append(eps)
+
+        if self.deform_graph != None:
+            self.deform_graph.update(self.time_list, self.linear_encoder_list)
+
+        if self.force_graph != None:
+            self.force_graph.update(self.time_list, self.dinamometr_list)
 
 
     def set_zero_on_line(self) -> None:

@@ -1565,12 +1565,30 @@
     </property>
     <addaction name="connection_settings"/>
    </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Графики</string>
+    </property>
+    <addaction name="deform_graph"/>
+    <addaction name="force_graph"/>
+   </widget>
    <addaction name="menu_conn"/>
+   <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="connection_settings">
    <property name="text">
     <string>Настройки соединения</string>
+   </property>
+  </action>
+  <action name="deform_graph">
+   <property name="text">
+    <string>Деформация</string>
+   </property>
+  </action>
+  <action name="force_graph">
+   <property name="text">
+    <string>Сила</string>
    </property>
   </action>
  </widget>
