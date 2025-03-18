@@ -32,9 +32,13 @@ class MainWindow(QMainWindow):
 
         # Флаг начала эксперимента
         self.flag_start = True
+        # Флаг выставления нуля
+        self.flag_setting_zero = False
 
         # Предыдущее значение продольной деформации
         self.prev_long_deform = 0
+        # Предыдущее значение линейного энкодера
+        self.prev_linear_encoder = 0
 
         # Массивы для хранения показаний
         self.time_list = []
@@ -181,6 +185,12 @@ class MainWindow(QMainWindow):
         self.ui.tedit_global_log.append(formatted_time + "\t" + str(data[0]) + "\t" + str(data[1]))
 
         self.force_current, self.length_current = data
+
+        if self.flag_setting_zero and (self.length_current - self.prev_linear_encoder < 0.2):
+            lu.set_zero_linear_encoder(self.linear_encoder)
+            self.flag_setting_zero = False
+
+        self.prev_linear_encoder = self.length_current
 
         # Если есть разрешение записи в файл, то сохраняется значение текущие
         if (self.ui.chbox_write_file.isChecked):
@@ -374,7 +384,6 @@ class MainWindow(QMainWindow):
     def find_zero_position(self) -> None:
         '''Поиск позиции преднатяга, выставление нулевой точки'''
         # 1. Определение стартовых значений
-        # f_0, x_0 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
         f_0, x_0 = self.force_current, self.length_current
         # 2. Смещение на 1000 шагов к двигателю
         su.start(500, 0, 1000, self.stepper_motor)
@@ -390,9 +399,11 @@ class MainWindow(QMainWindow):
         print(x_2)
         # 5. Отправляем работать шаговый двигатель
         su.start(500, int(x_2 < 0), int(abs(4 * x_2)), self.stepper_motor)
+        self.flag_setting_zero = True
+
         # TODO: добавить проверку на движение шагового двигателя, после остановки выполнять обнуление
         sleep(10)
-        lu.set_zero_linear_encoder(self.linear_encoder)
+
 
 
 if __name__ == "__main__":
