@@ -273,6 +273,7 @@ class Ui_MainWindow(object):
 
         self.pbutton_save_file = QPushButton(self.experiment_frame)
         self.pbutton_save_file.setObjectName(u"pbutton_save_file")
+        self.pbutton_save_file.setEnabled(False)
 
         self.gridLayout_7.addWidget(self.pbutton_save_file, 8, 2, 1, 1)
 
@@ -464,14 +465,14 @@ class Ui_MainWindow(object):
 
         self.module_move_layout = QGridLayout()
         self.module_move_layout.setObjectName(u"module_move_layout")
-        self.frame_module_move = QFrame(self.centralwidget)
-        self.frame_module_move.setObjectName(u"frame_module_move")
-        self.frame_module_move.setFont(font2)
-        self.frame_module_move.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_module_move.setFrameShadow(QFrame.Shadow.Raised)
-        self.gridLayout_3 = QGridLayout(self.frame_module_move)
+        self.module_move_frame = QFrame(self.centralwidget)
+        self.module_move_frame.setObjectName(u"module_move_frame")
+        self.module_move_frame.setFont(font2)
+        self.module_move_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.module_move_frame.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout_3 = QGridLayout(self.module_move_frame)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
-        self.toggle_direct = QCheckBox(self.frame_module_move)
+        self.toggle_direct = QCheckBox(self.module_move_frame)
         self.toggle_direct.setObjectName(u"toggle_direct")
         self.toggle_direct.setEnabled(False)
 
@@ -481,19 +482,19 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addItem(self.horizontalSpacer, 1, 1, 1, 1)
 
-        self.label_units_distance = QLabel(self.frame_module_move)
+        self.label_units_distance = QLabel(self.module_move_frame)
         self.label_units_distance.setObjectName(u"label_units_distance")
         self.label_units_distance.setFont(font3)
 
         self.gridLayout_3.addWidget(self.label_units_distance, 3, 3, 1, 1)
 
-        self.distance_mm = QLabel(self.frame_module_move)
+        self.distance_mm = QLabel(self.module_move_frame)
         self.distance_mm.setObjectName(u"distance_mm")
         self.distance_mm.setFont(font2)
 
         self.gridLayout_3.addWidget(self.distance_mm, 3, 0, 1, 1)
 
-        self.dsbox_distance = QDoubleSpinBox(self.frame_module_move)
+        self.dsbox_distance = QDoubleSpinBox(self.module_move_frame)
         self.dsbox_distance.setObjectName(u"dsbox_distance")
         self.dsbox_distance.setEnabled(False)
         self.dsbox_distance.setFont(font2)
@@ -501,7 +502,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.dsbox_distance, 3, 2, 1, 1)
 
-        self.label_units_speed = QLabel(self.frame_module_move)
+        self.label_units_speed = QLabel(self.module_move_frame)
         self.label_units_speed.setObjectName(u"label_units_speed")
         sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
@@ -512,7 +513,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.label_units_speed, 1, 3, 1, 2)
 
-        self.label_speed = QLabel(self.frame_module_move)
+        self.label_speed = QLabel(self.module_move_frame)
         self.label_speed.setObjectName(u"label_speed")
         sizePolicy3.setHeightForWidth(self.label_speed.sizePolicy().hasHeightForWidth())
         self.label_speed.setSizePolicy(sizePolicy3)
@@ -520,40 +521,40 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addWidget(self.label_speed, 1, 0, 1, 1)
 
-        self.sbox_speed = QSpinBox(self.frame_module_move)
+        self.sbox_speed = QSpinBox(self.module_move_frame)
         self.sbox_speed.setObjectName(u"sbox_speed")
         self.sbox_speed.setEnabled(False)
         self.sbox_speed.setFont(font2)
 
         self.gridLayout_3.addWidget(self.sbox_speed, 1, 2, 1, 1)
 
-        self.label_module_move = QLabel(self.frame_module_move)
+        self.label_module_move = QLabel(self.module_move_frame)
         self.label_module_move.setObjectName(u"label_module_move")
         self.label_module_move.setFont(font4)
         self.label_module_move.setAlignment(Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignTop)
 
         self.gridLayout_3.addWidget(self.label_module_move, 0, 0, 1, 5)
 
-        self.direct_mm = QLabel(self.frame_module_move)
+        self.direct_mm = QLabel(self.module_move_frame)
         self.direct_mm.setObjectName(u"direct_mm")
         self.direct_mm.setFont(font2)
 
         self.gridLayout_3.addWidget(self.direct_mm, 2, 0, 1, 1)
 
-        self.pbutton_start = QPushButton(self.frame_module_move)
+        self.pbutton_start = QPushButton(self.module_move_frame)
         self.pbutton_start.setObjectName(u"pbutton_start")
         self.pbutton_start.setEnabled(False)
 
         self.gridLayout_3.addWidget(self.pbutton_start, 4, 0, 1, 1)
 
-        self.pbutton_stop = QPushButton(self.frame_module_move)
+        self.pbutton_stop = QPushButton(self.module_move_frame)
         self.pbutton_stop.setObjectName(u"pbutton_stop")
         self.pbutton_stop.setEnabled(False)
 
         self.gridLayout_3.addWidget(self.pbutton_stop, 4, 2, 1, 1)
 
 
-        self.module_move_layout.addWidget(self.frame_module_move, 0, 0, 1, 1)
+        self.module_move_layout.addWidget(self.module_move_frame, 0, 0, 1, 1)
 
 
         self.main_layout.addLayout(self.module_move_layout, 2, 0, 1, 1)
@@ -748,6 +749,117 @@ class Ui_MainWindow(object):
 
         self.main_layout.addLayout(self.sens_el_layout, 1, 0, 1, 1)
 
+        self.calculation_data_layout = QGridLayout()
+        self.calculation_data_layout.setObjectName(u"calculation_data_layout")
+        self.calculation_data_frame = QFrame(self.centralwidget)
+        self.calculation_data_frame.setObjectName(u"calculation_data_frame")
+        self.calculation_data_frame.setFont(font2)
+        self.calculation_data_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.calculation_data_frame.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout_8 = QGridLayout(self.calculation_data_frame)
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.label_units_rel_elong = QLabel(self.calculation_data_frame)
+        self.label_units_rel_elong.setObjectName(u"label_units_rel_elong")
+        self.label_units_rel_elong.setFont(font3)
+
+        self.gridLayout_8.addWidget(self.label_units_rel_elong, 3, 2, 1, 1)
+
+        self.label_rel_elong = QLabel(self.calculation_data_frame)
+        self.label_rel_elong.setObjectName(u"label_rel_elong")
+
+        self.gridLayout_8.addWidget(self.label_rel_elong, 3, 0, 1, 1)
+
+        self.label_units_final_diam = QLabel(self.calculation_data_frame)
+        self.label_units_final_diam.setObjectName(u"label_units_final_diam")
+        sizePolicy1.setHeightForWidth(self.label_units_final_diam.sizePolicy().hasHeightForWidth())
+        self.label_units_final_diam.setSizePolicy(sizePolicy1)
+        self.label_units_final_diam.setFont(font3)
+
+        self.gridLayout_8.addWidget(self.label_units_final_diam, 1, 2, 1, 1)
+
+        self.label_output_rel_narrow = QLabel(self.calculation_data_frame)
+        self.label_output_rel_narrow.setObjectName(u"label_output_rel_narrow")
+        self.label_output_rel_narrow.setEnabled(False)
+        self.label_output_rel_narrow.setFont(font5)
+
+        self.gridLayout_8.addWidget(self.label_output_rel_narrow, 4, 1, 1, 1)
+
+        self.dsbox_final_length = QDoubleSpinBox(self.calculation_data_frame)
+        self.dsbox_final_length.setObjectName(u"dsbox_final_length")
+        self.dsbox_final_length.setEnabled(False)
+
+        self.gridLayout_8.addWidget(self.dsbox_final_length, 2, 1, 1, 1)
+
+        self.label_final_length = QLabel(self.calculation_data_frame)
+        self.label_final_length.setObjectName(u"label_final_length")
+
+        self.gridLayout_8.addWidget(self.label_final_length, 2, 0, 1, 1)
+
+        self.dsbox_final_diam = QDoubleSpinBox(self.calculation_data_frame)
+        self.dsbox_final_diam.setObjectName(u"dsbox_final_diam")
+        self.dsbox_final_diam.setEnabled(False)
+
+        self.gridLayout_8.addWidget(self.dsbox_final_diam, 1, 1, 1, 1)
+
+        self.label_calculation_data = QLabel(self.calculation_data_frame)
+        self.label_calculation_data.setObjectName(u"label_calculation_data")
+        self.label_calculation_data.setFont(font1)
+        self.label_calculation_data.setAlignment(Qt.AlignmentFlag.AlignHCenter|Qt.AlignmentFlag.AlignTop)
+
+        self.gridLayout_8.addWidget(self.label_calculation_data, 0, 0, 1, 3)
+
+        self.label_units_rel_narrow = QLabel(self.calculation_data_frame)
+        self.label_units_rel_narrow.setObjectName(u"label_units_rel_narrow")
+        self.label_units_rel_narrow.setFont(font3)
+
+        self.gridLayout_8.addWidget(self.label_units_rel_narrow, 4, 2, 1, 1)
+
+        self.label_units_final_length = QLabel(self.calculation_data_frame)
+        self.label_units_final_length.setObjectName(u"label_units_final_length")
+        self.label_units_final_length.setFont(font3)
+
+        self.gridLayout_8.addWidget(self.label_units_final_length, 2, 2, 1, 1)
+
+        self.label_final_diam = QLabel(self.calculation_data_frame)
+        self.label_final_diam.setObjectName(u"label_final_diam")
+
+        self.gridLayout_8.addWidget(self.label_final_diam, 1, 0, 1, 1)
+
+        self.label_rel_narrow = QLabel(self.calculation_data_frame)
+        self.label_rel_narrow.setObjectName(u"label_rel_narrow")
+
+        self.gridLayout_8.addWidget(self.label_rel_narrow, 4, 0, 1, 1)
+
+        self.label_output_rel_elong = QLabel(self.calculation_data_frame)
+        self.label_output_rel_elong.setObjectName(u"label_output_rel_elong")
+        self.label_output_rel_elong.setEnabled(False)
+        self.label_output_rel_elong.setFont(font5)
+
+        self.gridLayout_8.addWidget(self.label_output_rel_elong, 3, 1, 1, 1)
+
+        self.label_module_elast = QLabel(self.calculation_data_frame)
+        self.label_module_elast.setObjectName(u"label_module_elast")
+
+        self.gridLayout_8.addWidget(self.label_module_elast, 5, 0, 1, 1)
+
+        self.label_output_module_elast = QLabel(self.calculation_data_frame)
+        self.label_output_module_elast.setObjectName(u"label_output_module_elast")
+        self.label_output_module_elast.setEnabled(False)
+        self.label_output_module_elast.setFont(font5)
+
+        self.gridLayout_8.addWidget(self.label_output_module_elast, 5, 1, 1, 1)
+
+        self.label_units__module_elast = QLabel(self.calculation_data_frame)
+        self.label_units__module_elast.setObjectName(u"label_units__module_elast")
+
+        self.gridLayout_8.addWidget(self.label_units__module_elast, 5, 2, 1, 1)
+
+
+        self.calculation_data_layout.addWidget(self.calculation_data_frame, 0, 0, 1, 1)
+
+
+        self.main_layout.addLayout(self.calculation_data_layout, 2, 1, 1, 1)
+
 
         self.gridLayout_2.addLayout(self.main_layout, 1, 0, 1, 1)
 
@@ -841,6 +953,20 @@ class Ui_MainWindow(object):
         self.label_units_mod_young.setText(QCoreApplication.translate("MainWindow", u"\u0415", None))
         self.label_notes.setText(QCoreApplication.translate("MainWindow", u"\u0417\u0430\u043c\u0435\u0442\u043a\u0438", None))
         self.label_units_sagging.setText(QCoreApplication.translate("MainWindow", u"\u041d", None))
+        self.label_units_rel_elong.setText(QCoreApplication.translate("MainWindow", u"%", None))
+        self.label_rel_elong.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0435 \u0443\u0434\u043b\u0438\u043d\u0435\u043d\u0438\u0435 \u0427\u042d, \u03b4", None))
+        self.label_units_final_diam.setText(QCoreApplication.translate("MainWindow", u"\u043c\u043c", None))
+        self.label_output_rel_narrow.setText("")
+        self.label_final_length.setText(QCoreApplication.translate("MainWindow", u"\u041a\u043e\u043d\u0435\u0447\u043d\u0430\u044f \u0434\u043b\u0438\u043d\u0430 \u0427\u042d, \u0394Lk", None))
+        self.label_calculation_data.setText(QCoreApplication.translate("MainWindow", u"\u041c\u043e\u0434\u0443\u043b\u044c \u0440\u0430\u0441\u0447\u0451\u0442\u043d\u044b\u0445 \u0434\u0430\u043d\u043d\u044b\u0445", None))
+        self.label_units_rel_narrow.setText(QCoreApplication.translate("MainWindow", u"%", None))
+        self.label_units_final_length.setText(QCoreApplication.translate("MainWindow", u"\u043c", None))
+        self.label_final_diam.setText(QCoreApplication.translate("MainWindow", u"\u041a\u043e\u043d\u0435\u0447\u043d\u044b\u0439 \u0434\u0438\u0430\u043c\u0435\u0442\u0440 \u0427\u042d", None))
+        self.label_rel_narrow.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0442\u043d\u043e\u0441\u0438\u0442\u0435\u043b\u044c\u043d\u043e\u0435 \u0441\u0443\u0436\u0435\u043d\u0438\u0435 \u0427\u042d, \u03c8", None))
+        self.label_output_rel_elong.setText("")
+        self.label_module_elast.setText(QCoreApplication.translate("MainWindow", u"\u041c\u043e\u0434\u0443\u043b\u044c \u0443\u043f\u0440\u0443\u0433\u043e\u0441\u0442\u0438 (\u042e\u043d\u0433\u0430)", None))
+        self.label_output_module_elast.setText("")
+        self.label_units__module_elast.setText(QCoreApplication.translate("MainWindow", u"E", None))
         self.menu_conn.setTitle(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 ", None))
     # retranslateUi
 

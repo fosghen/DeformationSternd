@@ -5,7 +5,7 @@ import datetime
 import serial
 from  time import sleep
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog
+from PySide6.QtWidgets import QApplication, QMainWindow, QFileDialog, QWidget
 from PySide6.QtGui import QColor
 
 from SensorsWorker import SensorsWorker
@@ -145,48 +145,22 @@ class MainWindow(QMainWindow):
         # Делаем заголовок для глобального лона
         self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
 
+
+
     def set_enabled_widgets(self) -> None:
         '''Делаем активными виджеты, после того, как успешно подключились к датчиками.'''
-        # # Модуль чувствительного элемента
-        self.ui.ledit_type_se.setEnabled(1)
-        self.ui.ledit_sens_el.setEnabled(1)
-        self.ui.dsbox_diam_start.setEnabled(1)
-        self.ui.dsbox_mod_young.setEnabled(1)
-        self.ui.dsbox_max_deform.setEnabled(1)
-        self.ui.dsbox_max_force.setEnabled(1)
-        self.ui.dsbox_deform_lim.setEnabled(1)
-        self.ui.dsbox_sagging.setEnabled(1)
-        self.ui.ledit_notes.setEnabled(1)
+        frames = [
+                self.ui.sens_el_frame,         # Модуль чувствительного элемента
+                self.ui.module_surv_dev_frame, # Модуль испытуемого устройства опроса
+                self.ui.module_move_frame,     # Модуль подвижки
+                self.ui.experiment_frame,      # Модуль деформации
+                self.ui.calculation_data_frame # Модуль расчётных данных
+            ]
 
-        # # Модуль испытуемого устройства опроса
-        self.ui.ledit_type_uo.setEnabled(1)
-        self.ui.ledit_name_uo.setEnabled(1)
-        self.ui.ledit_fac_no.setEnabled(1)
-        self.ui.ledit_type_of.setEnabled(1)
-        self.ui.dsbox_meas_dist.setEnabled(1)
-        self.ui.dsbox_spat_res.setEnabled(1)
-        self.ui.sbox_chan_no.setEnabled(1)
-        self.ui.ledit_diap_meas_def.setEnabled(1)
-        self.ui.dsbox_opt_dist.setEnabled(1)
+        for frame in frames:
+            for widget in frame.findChildren(QWidget):
+                widget.setEnabled(True)
 
-        # Модуль подвижки
-        self.ui.sbox_speed.setEnabled(1)
-        self.ui.toggle_direct.setEnabled(1)
-        self.ui.dsbox_distance.setEnabled(1)
-        self.ui.pbutton_start.setEnabled(1)
-        self.ui.pbutton_stop.setEnabled(1)
-
-        # # Модуль деформации
-        self.ui.dsbox_deform_area.setEnabled(1)
-        self.ui.pbutton_set_zero.setEnabled(1)
-        self.ui.cmob_type_deform.setEnabled(1)
-        self.ui.dsbox_long_deform.setEnabled(1)
-        self.ui.cbox_units_long_deform.setEnabled(1)
-        self.ui.dsbox_trans_deform.setEnabled(1)
-        self.ui.cbox_units_trans_deform.setEnabled(1)
-        self.ui.dsbox_dist_to_trans_deform.setEnabled(1)
-        self.ui.pbutton_start_deform.setEnabled(1)
-        self.ui.chbox_write_file.setEnabled(1)
 
     def start_stepper_motor(self) -> None:
         '''Запустить шаговый двигатель по кнопке.'''
@@ -233,7 +207,12 @@ class MainWindow(QMainWindow):
 
     def set_zero_on_line(self) -> None:
         '''Выставить относительный ноль на линейном энкодере.'''
-        lu.set_zero_linear_encoder(self.linear_encoder)
+
+        if self.ui.dsbox_sagging.value() < 1e-3:
+            lu.set_zero_linear_encoder(self.linear_encoder)
+            return
+
+        self.find_zero_position()
 
     def _compute_trans_deform(self) -> float:
         '''Расчёт необходимого поперечного смещения для того, чтобы достигнуть нужной деформации.'''
@@ -247,10 +226,10 @@ class MainWindow(QMainWindow):
         eps = self.ui.dsbox_trans_deform.value()
 
         if not self.ui.cbox_units_trans_deform.currentIndex():
-            # Перевод микро эпсилинов в мили эпсилоны
+            # Перевод микро эпсилонов в мили эпсилоны
             eps *= 1e-3
         else:
-            # Перевод процентных эпсилинов в мили эпсилоны
+            # Перевод процентных эпсилонов в мили эпсилоны
             eps *= 10
         # Вычисляем попоречное смещение для линии
         trans_deform = (((full_length ** 2 * (1 + eps) ** 2 - far_length ** 2 + near_length ** 2) / \
@@ -291,9 +270,6 @@ class MainWindow(QMainWindow):
             self.deformation_flag_list = []
 
             self.prev_long_deform = 0
-
-            self.find_zero_position()
-            # TODO: добавить алгоритм, который ищет ноль до отсутствия провисания
 
         # Определяем общую деформацию
         eps_trans = 0
@@ -400,16 +376,16 @@ class MainWindow(QMainWindow):
         # 1. Определение стартовых значений
         x_0, f_0 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
 
-        # 2. Смещение на 100 шагов к двигателю
-        su.start(500, 0, 100, self.stepper_motor)
+        # 2. Смещение на 1000 шагов к двигателю
+        su.start(500, 0, 1000, self.stepper_motor)
+        # Ждём пока двигаель поработает и всё успокоится
         sleep(3)
 
         # 3. Определение новых значений
         x_1, f_1 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
-        print(x_0, x_1, f_0, f_1)
 
         # 4. Вычисление новой координаты
-        x_2 = (x_1 - x_0) * (self.ui.dsbox_max_force.value() - f_0) / (f_1 - f_0) + x_0
+        x_2 = (x_1 - x_0) * (self.ui.dsbox_sagging.value() - f_0) / (f_1 - f_0) + x_0
 
         # 5. Отправляем работать шаговый двигатель
         su.start(500, int(x_2 < 0), int(abs(4 * x_2)), self.stepper_motor)
