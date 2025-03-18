@@ -13,4 +13,4 @@ def get_value_from_sensors(dinamometr: serial.serialwin32.Serial, linear_encoder
     except:
         dino_data = float(dino_data[-2])
 
-    return dino_data, line_data
+    return 9.81 * 1000 * dino_data, line_data

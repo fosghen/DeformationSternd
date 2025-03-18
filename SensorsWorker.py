@@ -37,7 +37,7 @@ class SensorsWorker(QThread):
                     dino_data = float(dino_data[-2])
 
                 if dino_data:
-                    self.data_received.emit([dino_data, line_data])  # Отправляем данные в основной поток
+                    self.data_received.emit([9.81 * 1000 * dino_data, line_data])  # Отправляем данные в основной поток
             except serial.SerialException as e:
                 self.data_received.emit(f"Ошибка связи: {e}")
                 break
