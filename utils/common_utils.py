@@ -1,4 +1,4 @@
-import lir_utils as lu
+import utils.lir_utils as lu
 import serial
 import hid
 
