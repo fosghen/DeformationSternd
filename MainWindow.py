@@ -16,7 +16,7 @@ import utils.lir_utils as lu
 import utils.stepper_utils as su
 from utils.common_utils import get_value_from_sensors
 
-from numpy import savetxt, vstack, array
+from numpy import savetxt, vstack, array, pi
 
 # Important:
 # You need to run the following command to generate the ui_form.py file
@@ -96,6 +96,10 @@ class MainWindow(QMainWindow):
         self.ui.pbutton_start_deform.pressed.connect(self.start_deformation)
         # Связываем сигнал от кнопки сохранения файла с функцией
         self.ui.pbutton_save_file.pressed.connect(self.save_file)
+
+        # Связываем сигналы от изменения в полях модуля расчётных данных
+        self.ui.dsbox_final_diam.valueChanged.connect(self.compute_rel_narrow)
+        self.ui.dsbox_final_length.valueChanged.connect(self.compute_rel_elong)
 
     def open_settings(self) -> None:
         '''Создание окна настроек подключения датчиков.'''
@@ -187,7 +191,6 @@ class MainWindow(QMainWindow):
         self.ui.tedit_global_log.append(formatted_time + "\t" + str(data[0]) + "\t" + str(data[1]))
 
         self.force_current, self.length_current = data
-        print(self.flag_setting_zero, self.length_current, self.length_current)
         if self.flag_setting_zero and (abs(self.length_current - self.prev_linear_encoder) < 0.2):
             self.it += 1 
             if self.it == 5:
@@ -272,8 +275,6 @@ class MainWindow(QMainWindow):
 
     def start_deformation(self) -> None:
         '''Запустить деформирование оптического волокна.'''
-
-
         # Если первый запуск, то очищаем все массивы
         if self.flag_start:
             self.flag_start = False
@@ -407,6 +408,31 @@ class MainWindow(QMainWindow):
         self.flag_setting_zero = True
         sleep(0.5)
 
+    def compute_rel_elong(self, final_lenght: float) -> None:
+        start_lenght = self.ui.dsbox_deform_area.value()
+        if start_lenght > 0:
+            delta = 100 * (final_lenght - start_lenght) / start_lenght
+            self.ui.label_output_rel_elong.setText(str(delta))
+        else:
+            self.ui.label_output_rel_elong.setText("Деформируемый участок, ΔL = 0!")
+
+    def compute_rel_narrow(self, final_diam: float) -> None:
+        start_diam = self.ui.dsbox_diam_start.value()
+        if final_diam > 0:
+            psi = 100 * ((start_diam / final_diam) ** 2 - 1)
+            self.ui.label_output_rel_narrow.setText(str(psi))
+
+            E = self.compute_module_elasty(final_diam)
+            self.ui.label_output_module_elast.setText(str(E))
+
+        else:
+            self.ui.label_output_rel_narrow.setText("Конечный диаметр ЧЭ = 0!")
+
+    def compute_module_elasty(self, final_diam: float) -> float | str:
+        if self.length_current == 0:
+            return "Относительное удлинение нулевое"
+
+        return self.force_current * self.ui.dsbox_deform_area.value() / self.length_current / (pi * final_diam ** 2 / 4)
 
 
 if __name__ == "__main__":
