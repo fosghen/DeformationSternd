@@ -401,9 +401,6 @@ class MainWindow(QMainWindow):
         su.start(500, int(x_2 < 0), int(abs(4 * x_2)), self.stepper_motor)
         self.flag_setting_zero = True
 
-        # TODO: добавить проверку на движение шагового двигателя, после остановки выполнять обнуление
-        sleep(10)
-
 
 
 if __name__ == "__main__":
