@@ -34,6 +34,8 @@ class MainWindow(QMainWindow):
         self.flag_start = True
         # Флаг выставления нуля
         self.flag_setting_zero = False
+        # Количество подряд неподвижных частей (надо переделать жтот коментарий)
+        self.it = 0
 
         # Предыдущее значение продольной деформации
         self.prev_long_deform = 0
@@ -185,10 +187,13 @@ class MainWindow(QMainWindow):
         self.ui.tedit_global_log.append(formatted_time + "\t" + str(data[0]) + "\t" + str(data[1]))
 
         self.force_current, self.length_current = data
-
-        if self.flag_setting_zero and (self.length_current - self.prev_linear_encoder < 0.2):
-            lu.set_zero_linear_encoder(self.linear_encoder)
-            self.flag_setting_zero = False
+        print(self.flag_setting_zero, self.length_current, self.length_current)
+        if self.flag_setting_zero and (abs(self.length_current - self.prev_linear_encoder) < 0.2):
+            self.it += 1 
+            if self.it == 5:
+                self.it = 0
+                lu.set_zero_linear_encoder(self.linear_encoder)
+                self.flag_setting_zero = False
 
         self.prev_linear_encoder = self.length_current
 
@@ -400,6 +405,7 @@ class MainWindow(QMainWindow):
         # 5. Отправляем работать шаговый двигатель
         su.start(500, int(x_2 < 0), int(abs(4 * x_2)), self.stepper_motor)
         self.flag_setting_zero = True
+        sleep(0.5)
 
 
 
