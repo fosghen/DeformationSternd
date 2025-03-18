@@ -374,21 +374,25 @@ class MainWindow(QMainWindow):
     def find_zero_position(self) -> None:
         '''Поиск позиции преднатяга, выставление нулевой точки'''
         # 1. Определение стартовых значений
-        x_0, f_0 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
-
+        # f_0, x_0 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
+        f_0, x_0 = self.force_current, self.length_current
         # 2. Смещение на 1000 шагов к двигателю
         su.start(500, 0, 1000, self.stepper_motor)
         # Ждём пока двигаель поработает и всё успокоится
         sleep(3)
 
         # 3. Определение новых значений
-        x_1, f_1 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
+        f_1, x_1 = get_value_from_sensors(self.dinamometr, self.linear_encoder)
+        print(x_0, x_1, f_0, f_1)
 
         # 4. Вычисление новой координаты
-        x_2 = (x_1 - x_0) * (self.ui.dsbox_sagging.value() - f_0) / (f_1 - f_0) + x_0
-
+        x_2 = (x_1 - x_0) * (self.ui.dsbox_sagging.value() - f_0) / (f_1 - f_0)
+        print(x_2)
         # 5. Отправляем работать шаговый двигатель
         su.start(500, int(x_2 < 0), int(abs(4 * x_2)), self.stepper_motor)
+        # TODO: добавить проверку на движение шагового двигателя, после остановки выполнять обнуление
+        sleep(10)
+        lu.set_zero_linear_encoder(self.linear_encoder)
 
 
 if __name__ == "__main__":
