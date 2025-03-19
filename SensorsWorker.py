@@ -26,7 +26,7 @@ class SensorsWorker(QThread):
         while self.running:
             time.sleep(0.5)
             try:
-                if (self.dinamometr == None) or (self.linear_encoder == None) continue
+                if (self.dinamometr == None) or (self.linear_encoder == None): continue
                 dino_data = self.dinamometr.read_all()  # Считываем данные с динамометра
                 line_data = -lu.read_linear_encoder(self.linear_encoder) # Считываем данные с линейки
 
