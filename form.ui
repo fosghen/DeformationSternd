@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1293</width>
-    <height>820</height>
+    <height>834</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1416,7 +1416,7 @@
               </font>
              </property>
              <property name="text">
-              <string>                                                          </string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -1507,7 +1507,7 @@
               </font>
              </property>
              <property name="text">
-              <string>                                                          </string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -1530,7 +1530,7 @@
               </font>
              </property>
              <property name="text">
-              <string>                                                          </string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -1569,8 +1569,7 @@
     <property name="title">
      <string>Графики</string>
     </property>
-    <addaction name="deform_graph"/>
-    <addaction name="force_graph"/>
+    <addaction name="graph"/>
    </widget>
    <addaction name="menu_conn"/>
    <addaction name="menu"/>
@@ -1581,9 +1580,9 @@
     <string>Настройки соединения</string>
    </property>
   </action>
-  <action name="deform_graph">
+  <action name="graph">
    <property name="text">
-    <string>Деформация</string>
+    <string>График</string>
    </property>
   </action>
   <action name="force_graph">

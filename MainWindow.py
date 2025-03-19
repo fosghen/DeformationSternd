@@ -62,9 +62,8 @@ class MainWindow(QMainWindow):
         # Создаём объект для считывания данных с датчика
         self.worker = None
 
-        # Создаём объекты для окон графиков
-        self.deform_graph = None
-        self.force_graph = None
+        # Создаём объект для окона графиков
+        self.graph = None
 
         # Создаём переключатель для изменения направления движения двигателя
         self.ui.customCheckBox = QToggle(
@@ -92,11 +91,8 @@ class MainWindow(QMainWindow):
             self.ui.connection_settings.triggered.connect(self.open_settings)
 
         # Связываем сигналы вызовов графиков со своими функциями
-        if self.ui.deform_graph:
-            self.ui.deform_graph.triggered.connect(self.open_deform_graph)
-        if self.ui.force_graph:
-            self.ui.force_graph.triggered.connect(self.open_force_graph)
-
+        if self.ui.graph:
+            self.ui.graph.triggered.connect(self.open_graph)
 
         # Связываем сигналы от кнопок в модуле подвижки с функциями
         self.ui.pbutton_start.pressed.connect(self.start_stepper_motor)
@@ -117,65 +113,87 @@ class MainWindow(QMainWindow):
         '''Создание окна настроек подключения датчиков.'''
         self.settings_window = SettingsDialog()
         # Связываем события закрытия с функцией
-        self.settings_window.finished.connect(self.on_settings_closed)
+        self.settings_window.ui.pbutton_connect.pressed.connect(self.com_connect)
+        self.settings_window.ui.pbutton_disconnect.pressed.connect(self.com_disconnect)
+        # self.settings_window.finished.connect(self.on_settings_closed)
         self.settings_window.exec()
 
-    def open_deform_graph(self) -> None:
-        '''Создание окна с графиком деформации'''
-        self.deform_graph = PyQtGraphWidget("Деформация", "мкε")
-        self.deform_graph.show()
+    def open_graph(self) -> None:
+        '''Создание окна с графикома деформации и силы'''
+        self.graph = PyQtGraphWidget()
+        self.graph.show()
 
-    def open_force_graph(self) -> None:
-        '''Создание окна с графиком деформации'''
-        self.force_graph = PyQtGraphWidget("Сила", "Н")
-        self.force_graph.show()
+    def com_disconnect(self) -> None:
+        if self.stepper_motor != None:
+            print("шаговый двиг выкл")
+            self.stepper_motor.close()
+            self.stepper_motor = None
 
-    def on_settings_closed(self) -> None:
+        if self.dinamometr != None:
+            print("динамом выкл")
+            self.dinamometr.close()
+            self.dinamometr = None
+
+        if self.linear_encoder != None:
+            self.linear_encoder.close()
+            self.linear_encoder = None
+
+        if self.worker != None:
+            self.worker.stop()
+
+    def com_connect(self) -> None:
         '''
         Функция вызывается, когда окно настройки подключения датчиков закрывается.
         Получаем COM порты, которые пользователь выбрал, и подключаемся к ним.
         '''
         # Подключаемся к шаговому двигателю
-        self.stepper_motor = serial.Serial(
-                self.settings_window.ui.cbox_stepper_motor.currentText(),
-                9600,
-                timeout=1
-                )
-        if (not self.stepper_motor):
-            print("Не смог подключиться к двигателю")
-            return
+        if self.stepper_motor == None:
+            print("шаговый двиг вкл")
+            self.stepper_motor = serial.Serial(
+                    self.settings_window.ui.cbox_stepper_motor.currentText(),
+                    9600,
+                    timeout=1
+                    )
+            if (not self.stepper_motor):
+                print("Не смог подключиться к двигателю")
+                return
 
         # Подключаемся к динамометру
-        self.dinamometr = serial.Serial(
-                self.settings_window.ui.cbox_dinamomert.currentText(),
-                9600,
-                timeout=1
-                )
-        if (not self.dinamometr):
-            print("Не смог подключиться к динамометру")
-            return
+        if self.dinamometr == None:
+            print("динамом вкл")
+            self.dinamometr = serial.Serial(
+                    self.settings_window.ui.cbox_dinamomert.currentText(),
+                    9600,
+                    timeout=1
+                    )
+            if (not self.dinamometr):
+                print("Не смог подключиться к динамометру")
+                return
 
         # Подключаемся к линейке
-        self.linear_encoder = lu.connect(
-                0xdead,
-                0xffff)
-        lu.start_setup(self.linear_encoder)
+        if self.linear_encoder == None:
+            self.linear_encoder = lu.connect(
+                    0xdead,
+                    0xffff)
+            lu.start_setup(self.linear_encoder)
 
-        if (not self.linear_encoder):
-            print("Не смог подключиться к линейному энкодеру")
-            return
+            if (not self.linear_encoder):
+                print("Не смог подключиться к линейному энкодеру")
+                return
 
         self.set_enabled_widgets()
 
-        # Передаём воркеру интерфейсы общения
-        self.worker = SensorsWorker(self.dinamometr, self.linear_encoder)
-        # Связываем сигнал от воркера с тем, что нужно вывести данные в глобальный лог
-        self.worker.data_received.connect(self.update_global_log)
-        # Запускаем
+        if self.worker == None:
+            # Передаём воркеру интерфейсы общения
+            self.worker = SensorsWorker(self.dinamometr, self.linear_encoder)
+            # Связываем сигнал от воркера с тем, что нужно вывести данные в глобальный лог
+            self.worker.data_received.connect(self.update_global_log)
+            # Запускаем
+            self.worker.start()
+            # Делаем заголовок для глобального лона
+            self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
         self.worker.running = True
         self.worker.start()
-        # Делаем заголовок для глобального лона
-        self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
 
 
 
@@ -244,11 +262,8 @@ class MainWindow(QMainWindow):
                     eps = eps_long + eps_trans
             self.deformation_list.append(eps)
 
-        if self.deform_graph != None:
-            self.deform_graph.update(self.time_list, self.linear_encoder_list)
-
-        if self.force_graph != None:
-            self.force_graph.update(self.time_list, self.dinamometr_list)
+        if self.graph != None:
+            self.graph.update(self.time_list, self.linear_encoder_list, self.dinamometr_list)
 
 
     def set_zero_on_line(self) -> None:
