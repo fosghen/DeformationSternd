@@ -45,3 +45,5 @@ class SensorsWorker(QThread):
 
     def stop(self) -> None:
         self.running = False  # Останавливаем поток
+        self.requestInterruption()  # Запрашиваем прерывание
+        self.wait()
