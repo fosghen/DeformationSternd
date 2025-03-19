@@ -40,8 +40,8 @@ class SensorsWorker(QThread):
                 if dino_data:
                     self.data_received.emit([1000 * dino_data, line_data])  # Отправляем данные в основной поток
             except serial.SerialException as e:
-                self.data_received.emit(f"Ошибка связи: {e}")
-                break
+                # self.data_received.emit(f"Ошибка связи: {e}")
+                continue
 
     def stop(self) -> None:
         self.running = False  # Останавливаем поток
