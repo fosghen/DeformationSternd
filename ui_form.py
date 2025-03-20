@@ -107,7 +107,7 @@ class Ui_MainWindow(object):
         self.dsbox_trans_deform.setObjectName(u"dsbox_trans_deform")
         self.dsbox_trans_deform.setEnabled(False)
         self.dsbox_trans_deform.setDecimals(3)
-        self.dsbox_trans_deform.setMaximum(1000.000000000000000)
+        self.dsbox_trans_deform.setMaximum(9999.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_trans_deform, 4, 1, 1, 1)
 
@@ -148,7 +148,7 @@ class Ui_MainWindow(object):
         self.dsbox_dist_to_trans_deform.setObjectName(u"dsbox_dist_to_trans_deform")
         self.dsbox_dist_to_trans_deform.setEnabled(False)
         self.dsbox_dist_to_trans_deform.setDecimals(3)
-        self.dsbox_dist_to_trans_deform.setMaximum(1000.000000000000000)
+        self.dsbox_dist_to_trans_deform.setMaximum(9999.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_dist_to_trans_deform, 5, 2, 1, 1)
 
@@ -187,7 +187,7 @@ class Ui_MainWindow(object):
         self.dsbox_long_deform.setEnabled(False)
         self.dsbox_long_deform.setFont(font2)
         self.dsbox_long_deform.setDecimals(3)
-        self.dsbox_long_deform.setMaximum(1000.000000000000000)
+        self.dsbox_long_deform.setMaximum(9999.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_long_deform, 3, 1, 1, 1)
 
@@ -202,7 +202,7 @@ class Ui_MainWindow(object):
         self.dsbox_deform_area.setMaximumSize(QSize(16777215, 16777215))
         self.dsbox_deform_area.setFont(font2)
         self.dsbox_deform_area.setDecimals(3)
-        self.dsbox_deform_area.setMaximum(1000.000000000000000)
+        self.dsbox_deform_area.setMaximum(9999.000000000000000)
 
         self.gridLayout_7.addWidget(self.dsbox_deform_area, 1, 1, 1, 1)
 
@@ -307,6 +307,8 @@ class Ui_MainWindow(object):
         self.dsbox_meas_dist = QDoubleSpinBox(self.module_surv_dev_frame)
         self.dsbox_meas_dist.setObjectName(u"dsbox_meas_dist")
         self.dsbox_meas_dist.setEnabled(False)
+        self.dsbox_meas_dist.setMaximum(9999.989999999999782)
+        self.dsbox_meas_dist.setSingleStep(0.100000000000000)
 
         self.gridLayout_5.addWidget(self.dsbox_meas_dist, 5, 2, 1, 1)
 
@@ -321,6 +323,8 @@ class Ui_MainWindow(object):
         self.dsbox_spat_res = QDoubleSpinBox(self.module_surv_dev_frame)
         self.dsbox_spat_res.setObjectName(u"dsbox_spat_res")
         self.dsbox_spat_res.setEnabled(False)
+        self.dsbox_spat_res.setMaximum(9999.989999999999782)
+        self.dsbox_spat_res.setSingleStep(0.100000000000000)
 
         self.gridLayout_5.addWidget(self.dsbox_spat_res, 6, 2, 1, 1)
 
@@ -331,6 +335,9 @@ class Ui_MainWindow(object):
         self.dsbox_opt_dist = QDoubleSpinBox(self.module_surv_dev_frame)
         self.dsbox_opt_dist.setObjectName(u"dsbox_opt_dist")
         self.dsbox_opt_dist.setEnabled(False)
+        self.dsbox_opt_dist.setDecimals(1)
+        self.dsbox_opt_dist.setMaximum(99999.000000000000000)
+        self.dsbox_opt_dist.setSingleStep(0.100000000000000)
 
         self.gridLayout_5.addWidget(self.dsbox_opt_dist, 9, 2, 1, 1)
 
@@ -596,6 +603,8 @@ class Ui_MainWindow(object):
         self.dsbox_deform_lim.setObjectName(u"dsbox_deform_lim")
         self.dsbox_deform_lim.setEnabled(False)
         self.dsbox_deform_lim.setFont(font2)
+        self.dsbox_deform_lim.setMaximum(9999.989999999999782)
+        self.dsbox_deform_lim.setSingleStep(0.100000000000000)
 
         self.gridLayout_4.addWidget(self.dsbox_deform_lim, 7, 3, 1, 1)
 
@@ -609,6 +618,8 @@ class Ui_MainWindow(object):
         self.dsbox_max_deform.setObjectName(u"dsbox_max_deform")
         self.dsbox_max_deform.setEnabled(False)
         self.dsbox_max_deform.setFont(font2)
+        self.dsbox_max_deform.setMaximum(9999.989999999999782)
+        self.dsbox_max_deform.setSingleStep(0.100000000000000)
 
         self.gridLayout_4.addWidget(self.dsbox_max_deform, 5, 3, 1, 1)
 
@@ -694,6 +705,8 @@ class Ui_MainWindow(object):
         self.dsbox_sagging.setObjectName(u"dsbox_sagging")
         self.dsbox_sagging.setEnabled(False)
         self.dsbox_sagging.setFont(font2)
+        self.dsbox_sagging.setMaximum(9999.989999999999782)
+        self.dsbox_sagging.setSingleStep(0.100000000000000)
 
         self.gridLayout_4.addWidget(self.dsbox_sagging, 8, 3, 1, 1)
 
@@ -708,6 +721,8 @@ class Ui_MainWindow(object):
         self.dsbox_max_force.setObjectName(u"dsbox_max_force")
         self.dsbox_max_force.setEnabled(False)
         self.dsbox_max_force.setFont(font2)
+        self.dsbox_max_force.setMaximum(9999.989999999999782)
+        self.dsbox_max_force.setSingleStep(0.100000000000000)
 
         self.gridLayout_4.addWidget(self.dsbox_max_force, 6, 3, 1, 1)
 
@@ -737,6 +752,9 @@ class Ui_MainWindow(object):
         self.dsbox_diam_start.setObjectName(u"dsbox_diam_start")
         self.dsbox_diam_start.setEnabled(False)
         self.dsbox_diam_start.setFont(font2)
+        self.dsbox_diam_start.setDecimals(3)
+        self.dsbox_diam_start.setMaximum(9999.989999999999782)
+        self.dsbox_diam_start.setSingleStep(0.100000000000000)
 
         self.gridLayout_4.addWidget(self.dsbox_diam_start, 3, 3, 1, 1)
 
@@ -744,6 +762,8 @@ class Ui_MainWindow(object):
         self.dsbox_mod_young.setObjectName(u"dsbox_mod_young")
         self.dsbox_mod_young.setEnabled(False)
         self.dsbox_mod_young.setFont(font2)
+        self.dsbox_mod_young.setMaximum(9999.989999999999782)
+        self.dsbox_mod_young.setSingleStep(0.100000000000000)
 
         self.gridLayout_4.addWidget(self.dsbox_mod_young, 4, 3, 1, 1)
 
@@ -791,6 +811,8 @@ class Ui_MainWindow(object):
         self.dsbox_final_length = QDoubleSpinBox(self.calculation_data_frame)
         self.dsbox_final_length.setObjectName(u"dsbox_final_length")
         self.dsbox_final_length.setEnabled(False)
+        self.dsbox_final_length.setMaximum(9999.989999999999782)
+        self.dsbox_final_length.setSingleStep(0.100000000000000)
 
         self.gridLayout_8.addWidget(self.dsbox_final_length, 2, 1, 1, 1)
 
@@ -802,6 +824,9 @@ class Ui_MainWindow(object):
         self.dsbox_final_diam = QDoubleSpinBox(self.calculation_data_frame)
         self.dsbox_final_diam.setObjectName(u"dsbox_final_diam")
         self.dsbox_final_diam.setEnabled(False)
+        self.dsbox_final_diam.setDecimals(3)
+        self.dsbox_final_diam.setMaximum(9999.989999999999782)
+        self.dsbox_final_diam.setSingleStep(0.100000000000000)
 
         self.gridLayout_8.addWidget(self.dsbox_final_diam, 1, 1, 1, 1)
 

@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
         self.ui.sbox_speed.setValue(1000)
 
         # Устанавливаем значения максимальное, минимальное и начальное значения сдвига
-        self.ui.dsbox_distance.setRange(1, 400)
+        self.ui.dsbox_distance.setRange(0.0001, 400)
         self.ui.dsbox_distance.setValue(5)
 
         # Связываем сигнал вызова настроек с соответствующей функцией
@@ -355,8 +355,9 @@ class MainWindow(QMainWindow):
         max_deform = self.ui.dsbox_max_deform.value() if (self.ui.dsbox_max_deform.value() >= 1e-3) else 1e6
         max_force = self.ui.dsbox_max_force.value() if (self.ui.dsbox_max_force.value() >= 1e-3) else 1e6
 
+        print(max_deform, eps_full * 1e-4)
         # Если текущая сила или деформация превыщает, то мы ничего не делаем
-        if (max_force > self.force_current) and (max_deform > eps_full * 1e4):
+        if (max_force > self.force_current) and (max_deform > eps_full * 1e-4):
             # А если делаем, то сравниваемся с предылущим значением и уже на основе этого вычисляем
             # направление и количество шагов
             if (int(steps / 4) > self.prev_long_deform):
@@ -401,8 +402,8 @@ class MainWindow(QMainWindow):
                 "Модуль Юнга, E": f"{self.ui.dsbox_mod_young.value()} Па",
                 "Максимальная деформация": f"{self.ui.dsbox_max_deform.value()} %",
                 "Максимальное усилие": f"{self.ui.dsbox_max_force.value()} Н",
-                "Усилие исключающее провисание": f"{self.ui.dsbox_deform_lim.value()} Н",
-                "Придел упругой деформации": f"{self.ui.dsbox_sagging.value()} Н",
+                "Усилие исключающее провисание": f"{self.ui.dsbox_sagging.value()} Н",
+                "Придел упругой деформации": f"{self.ui.dsbox_deform_lim.value()} Н",
                 "Заметки": self.ui.ledit_notes.text()
             }
 

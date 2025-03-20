@@ -126,7 +126,7 @@
               <number>3</number>
              </property>
              <property name="maximum">
-              <double>1000.000000000000000</double>
+              <double>9999.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -209,7 +209,7 @@
               <number>3</number>
              </property>
              <property name="maximum">
-              <double>1000.000000000000000</double>
+              <double>9999.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -295,7 +295,7 @@
               <number>3</number>
              </property>
              <property name="maximum">
-              <double>1000.000000000000000</double>
+              <double>9999.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -326,7 +326,7 @@
               <number>3</number>
              </property>
              <property name="maximum">
-              <double>1000.000000000000000</double>
+              <double>9999.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -511,6 +511,12 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="3" column="0">
@@ -536,6 +542,12 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="10" column="0">
@@ -558,6 +570,15 @@
             <widget class="QDoubleSpinBox" name="dsbox_opt_dist">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="decimals">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <double>99999.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -1050,6 +1071,12 @@
                <pointsize>12</pointsize>
               </font>
              </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="6" column="4">
@@ -1073,6 +1100,12 @@
               <font>
                <pointsize>12</pointsize>
               </font>
+             </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -1244,6 +1277,12 @@
                <pointsize>12</pointsize>
               </font>
              </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="2" column="1" colspan="4">
@@ -1267,6 +1306,12 @@
               <font>
                <pointsize>12</pointsize>
               </font>
+             </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -1332,6 +1377,15 @@
                <pointsize>12</pointsize>
               </font>
              </property>
+             <property name="decimals">
+              <number>3</number>
+             </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="4" column="3">
@@ -1343,6 +1397,12 @@
               <font>
                <pointsize>12</pointsize>
               </font>
+             </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
@@ -1425,6 +1485,12 @@
              <property name="enabled">
               <bool>false</bool>
              </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -1438,6 +1504,15 @@
             <widget class="QDoubleSpinBox" name="dsbox_final_diam">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="decimals">
+              <number>3</number>
+             </property>
+             <property name="maximum">
+              <double>9999.989999999999782</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
              </property>
             </widget>
            </item>
