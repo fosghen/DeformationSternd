@@ -108,9 +108,6 @@ class MainWindow(QMainWindow):
         # Связываем сигналы от изменения в полях модуля расчётных данных
         self.ui.dsbox_final_diam.valueChanged.connect(self.compute_rel_narrow)
         self.ui.dsbox_final_length.valueChanged.connect(self.compute_rel_elong)
-        
-        # Делаем заголовок для глобального лона
-        self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
 
         # Делаем заголовок для глобального лона
         self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
@@ -135,6 +132,7 @@ class MainWindow(QMainWindow):
             del self.worker
             self.worker = None
 
+
         if self.stepper_motor != None:
             print("шаговый двиг выкл")
             self.stepper_motor.close()
@@ -148,6 +146,8 @@ class MainWindow(QMainWindow):
         if self.linear_encoder != None:
             self.linear_encoder.close()
             self.linear_encoder = None
+
+
 
     def com_connect(self) -> None:
         '''
@@ -173,11 +173,7 @@ class MainWindow(QMainWindow):
         if self.dinamometr != None:
             if not self.dinamometr.is_open:
                 self.dinamometr.open()
-        
-        if self.dinamometr != None:
-            if not self.dinamometr.is_open:
-                self.dinamometr.open()
-        
+
         # Подключаемся к динамометру
         if self.dinamometr == None:
             print("динамом вкл")
@@ -210,6 +206,8 @@ class MainWindow(QMainWindow):
             self.worker.data_received.connect(self.update_global_log)
             # Запускаем
             self.worker.start()
+            # Делаем заголовок для глобального лона
+            self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
         self.worker.running = True
         self.worker.start()
 
@@ -373,7 +371,6 @@ class MainWindow(QMainWindow):
         max_deform = self.ui.dsbox_max_deform.value() if (self.ui.dsbox_max_deform.value() >= 1e-3) else 1e6
         max_force = self.ui.dsbox_max_force.value() if (self.ui.dsbox_max_force.value() >= 1e-3) else 1e6
 
-        print(max_deform, eps_full * 1e-4)
         # Если текущая сила или деформация превыщает, то мы ничего не делаем
         if (max_force > self.force_current) and (max_deform > eps_full * 1e-4):
             # А если делаем, то сравниваемся с предылущим значением и уже на основе этого вычисляем
