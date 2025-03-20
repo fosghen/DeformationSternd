@@ -108,6 +108,9 @@ class MainWindow(QMainWindow):
         # Связываем сигналы от изменения в полях модуля расчётных данных
         self.ui.dsbox_final_diam.valueChanged.connect(self.compute_rel_narrow)
         self.ui.dsbox_final_length.valueChanged.connect(self.compute_rel_elong)
+        
+        # Делаем заголовок для глобального лона
+        self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
 
         # Делаем заголовок для глобального лона
         self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
@@ -132,7 +135,6 @@ class MainWindow(QMainWindow):
             del self.worker
             self.worker = None
 
-
         if self.stepper_motor != None:
             print("шаговый двиг выкл")
             self.stepper_motor.close()
@@ -146,8 +148,6 @@ class MainWindow(QMainWindow):
         if self.linear_encoder != None:
             self.linear_encoder.close()
             self.linear_encoder = None
-
-
 
     def com_connect(self) -> None:
         '''
@@ -173,7 +173,11 @@ class MainWindow(QMainWindow):
         if self.dinamometr != None:
             if not self.dinamometr.is_open:
                 self.dinamometr.open()
-
+        
+        if self.dinamometr != None:
+            if not self.dinamometr.is_open:
+                self.dinamometr.open()
+        
         # Подключаемся к динамометру
         if self.dinamometr == None:
             print("динамом вкл")
@@ -206,8 +210,6 @@ class MainWindow(QMainWindow):
             self.worker.data_received.connect(self.update_global_log)
             # Запускаем
             self.worker.start()
-            # Делаем заголовок для глобального лона
-            self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
         self.worker.running = True
         self.worker.start()
 
