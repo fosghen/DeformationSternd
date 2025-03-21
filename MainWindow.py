@@ -344,6 +344,8 @@ class MainWindow(QMainWindow):
 
             self.prev_long_deform = 0
 
+        # Определяем количество шагов
+        steps = 0
         # Определяем общую деформацию
         eps_trans = 0
         eps_long = 0
