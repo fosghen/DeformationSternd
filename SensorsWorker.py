@@ -33,9 +33,9 @@ class SensorsWorker(QThread):
                 dino_data = dino_data.decode().split("\r\n")
 
                 try:
-                    dino_data = float(dino_data[-1])
-                except:
                     dino_data = float(dino_data[-2])
+                except:
+                    dino_data = float(dino_data[-3])
 
                 if dino_data:
                     self.data_received.emit([1000 * dino_data, line_data])  # Отправляем данные в основной поток
