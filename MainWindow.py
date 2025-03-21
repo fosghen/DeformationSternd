@@ -206,8 +206,6 @@ class MainWindow(QMainWindow):
             self.worker.data_received.connect(self.update_global_log)
             # Запускаем
             self.worker.start()
-            # Делаем заголовок для глобального лона
-            self.ui.tedit_global_log.append("Время\tДинамометр\tЛинейка")
         self.worker.running = True
         self.worker.start()
 
@@ -312,7 +310,7 @@ class MainWindow(QMainWindow):
         trans_deform = (((full_length ** 2 * (1 + eps) ** 2 - far_length ** 2 + near_length ** 2) / \
              (2 * full_length * (1 + eps))) ** 2 - near_length ** 2) ** 0.5
 
-        return trans_deform, eps * 1e3
+        return trans_deform / 1e3, eps * 1e3
 
     def _compute_long_deform(self) -> int:
         '''Расчёт необходимого количества шагов двигателя для достижения нужной деформации.'''
